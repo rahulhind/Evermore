@@ -149,7 +149,7 @@ export const posts = [
     firstName: "Steve",
     lastName: "Ralph",
     location: "New York, CA",
-    description: "Some really long random description",
+    description: "Forever and ever..",
     picturePath: "post1.jpeg",
     userPicturePath: "p3.jpeg",
     likes: new Map([
@@ -159,9 +159,9 @@ export const posts = [
       [userIds[4], true],
     ]),
     comments: [
-      "random comment",
-      "another random comment",
-      "yet another random comment",
+      "This is so beautiful",
+      "I loved this!",
+      "Nice caption!",
     ],
   },
   {
