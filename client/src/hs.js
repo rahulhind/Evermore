@@ -1,1 +1,1 @@
-module.exports.host = "http://localhost:3001/";
+module.exports.host = "https://evermore-server.vercel.app/"
