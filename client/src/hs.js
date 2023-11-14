@@ -1,1 +1,1 @@
-module.exports.host = "https://evermore-server.vercel.app/"
+module.exports.host = "https://evermore.onrender.com/"
