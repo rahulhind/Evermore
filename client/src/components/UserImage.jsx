@@ -12,7 +12,7 @@ const UserImage = ({ image, size = "60px" }) => {
         width={size}
         height={size}
         alt="user"
-         src={`https://res.cloudinary.com/${process.env.CLOUD_NAME}/${image}`}
+         src={`https://res.cloudinary.com/dsrlvqk3i/${image}`}
        // src={`${host}/dsrlvqk3i/assets/${image}`}
       />
     </Box>
