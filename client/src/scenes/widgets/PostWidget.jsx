@@ -65,7 +65,7 @@ const PostWidget = ({
           height="auto"
           alt="post"
           style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          src={`https://res.cloudinary.com/${process.env.CLOUD_NAME}/${picturePath}`}
+          src={`https://res.cloudinary.com/dsrlvqk3i/${picturePath}`}
         />
       )}
       <FlexBetween mt="0.25rem">
