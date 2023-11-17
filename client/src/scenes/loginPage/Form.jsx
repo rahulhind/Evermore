@@ -58,6 +58,7 @@ const Form = () => {
 
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
+    //console.log("Coming");
     const formData = new FormData();
     for (let value in values) {
       formData.append(value, values[value]);
@@ -80,6 +81,7 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
+  //  console.log("Coming login");
     const loggedInResponse = await fetch(`${host}auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

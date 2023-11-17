@@ -8,7 +8,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
-
+console.log("POSTS",posts);
   const getPosts = async () => {
     const response = await fetch(`${host}posts`, {
       method: "GET",
@@ -26,6 +26,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+    //console.log("This response",response);
     const data = await response.json();
     dispatch(setPosts({ posts: data }));
   };
@@ -40,7 +41,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   return (
     <>
-      {posts.map(
+      {Array.isArray(posts) ? (posts.map(
         ({
           _id,
           userId,
@@ -66,7 +67,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             comments={comments}
           />
         )
-      )}
+      )):<p>No posts</p>}
     </>
   );
 };
