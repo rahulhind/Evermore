@@ -16,6 +16,7 @@ import {
   Button,
   IconButton,
   useMediaQuery,
+  TextField
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Dropzone from "react-dropzone";
@@ -66,6 +67,7 @@ const MyPostWidget = ({ picturePath }) => {
           placeholder="What's on your mind..."
           onChange={(e) => setPost(e.target.value)}
           value={post}
+          multiline
           sx={{
             width: "100%",
             backgroundColor: palette.neutral.light,
@@ -73,6 +75,7 @@ const MyPostWidget = ({ picturePath }) => {
             padding: "1rem 2rem",
           }}
         />
+      
       </FlexBetween>
       {isImage && (
         <Box
