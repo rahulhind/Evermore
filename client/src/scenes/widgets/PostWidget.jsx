@@ -37,37 +37,37 @@ const PostWidget = ({
   const primary = palette.primary.main;
 
   //Comment Patch
-  // const commentPost = async () => {
-  //   try {
-  //     const trimmedComment = comment.trim();
+  const commentPost = async () => {
+    try {
+      const trimmedComment = comment.trim();
 
-  //     if (!trimmedComment) {
-  //       // Avoid posting null or empty comments
-  //       return;
-  //     }
+      if (!trimmedComment) {
+        // Avoid posting null or empty comments
+        return;
+      }
 
-  //     const response = await fetch(`${host}posts/${postId}/comment`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ content: comment }),
-  //     });
+      const response = await fetch(`${host}posts/${postId}/comment`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content: comment }),
+      });
 
-  //     if (response.ok) {
-  //       const updatedPost = await response.json();
-  //       // Update the comments in the Redux state
-  //       //dispatch(setComments({ postId, comments: updatedPost.post.comments }));
-  //       setComment("");
-  //     } else {
-  //       // Handle errors
-  //       console.error("Error updating comment");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
+      if (response.ok) {
+        const updatedPost = await response.json();
+        // Update the comments in the Redux state
+        dispatch(setPost({ post: updatedPost.post }));
+        setComment("");
+      } else {
+        // Handle errors
+        console.error("Error updating comment");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   //Likes
   const patchLike = async () => {
     const response = await fetch(`${host}posts/${postId}/like`, {
@@ -129,11 +129,11 @@ const PostWidget = ({
       </FlexBetween>
       {isComments && (
         <Box mt="0.5rem">
-          {comments.map((comment, i) => (
+          {comments.map((commentss, i) => (
             <Box key={`${name}-${i}`}>
               <Divider />
               <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {comment}
+                {commentss.content}
               </Typography>
             </Box>
           ))}
@@ -153,7 +153,7 @@ const PostWidget = ({
             />
 
             <Button
-              
+              onClick={commentPost}
               sx={{
                 color: palette.background.alt,
                 backgroundColor: palette.primary.main,
