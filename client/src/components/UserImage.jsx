@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 //const host="https://res.cloudinary.com/"
 
 const UserImage = ({ image, size = "60px" }) => {
-  console.log("Profile Image",image);
+  // console.log("Profile Image",image);
   return (
    
     <Box width={size} height={size}>
