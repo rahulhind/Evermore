@@ -8,7 +8,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
-console.log("POSTS",posts);
+// console.log("POSTS",posts);
   const getPosts = async () => {
     const response = await fetch(`${host}posts`, {
       method: "GET",
