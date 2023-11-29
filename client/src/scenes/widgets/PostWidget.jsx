@@ -4,7 +4,7 @@ import {
   FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Divider, IconButton, Typography, useTheme,Button,InputBase } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -24,6 +24,7 @@ const PostWidget = ({
   likes,
   comments,
 }) => {
+  const [comment, setComment] = useState("");
   const [isComments, setIsComments] = useState(false);
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
@@ -35,6 +36,39 @@ const PostWidget = ({
   const main = palette.neutral.main;
   const primary = palette.primary.main;
 
+  //Comment Patch
+  // const commentPost = async () => {
+  //   try {
+  //     const trimmedComment = comment.trim();
+
+  //     if (!trimmedComment) {
+  //       // Avoid posting null or empty comments
+  //       return;
+  //     }
+
+  //     const response = await fetch(`${host}posts/${postId}/comment`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ content: comment }),
+  //     });
+
+  //     if (response.ok) {
+  //       const updatedPost = await response.json();
+  //       // Update the comments in the Redux state
+  //       //dispatch(setComments({ postId, comments: updatedPost.post.comments }));
+  //       setComment("");
+  //     } else {
+  //       // Handle errors
+  //       console.error("Error updating comment");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+  //Likes
   const patchLike = async () => {
     const response = await fetch(`${host}posts/${postId}/like`, {
       method: "PATCH",
@@ -103,7 +137,32 @@ const PostWidget = ({
               </Typography>
             </Box>
           ))}
-          <Divider />
+          {/* <Divider /> */}
+          <FlexBetween>
+            <InputBase
+              placeholder="Write your comment"
+              multiline
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              sx={{
+                width: "100%",
+                backgroundColor: palette.neutral.light,
+                borderRadius: "0.5rem",
+                padding: "0.5rem 1rem",
+              }}
+            />
+
+            <Button
+              
+              sx={{
+                color: palette.background.alt,
+                backgroundColor: palette.primary.main,
+                borderRadius: "0.5rem",
+              }}
+            >
+              Comment
+            </Button>
+          </FlexBetween>
         </Box>
       )}
     </WidgetWrapper>
