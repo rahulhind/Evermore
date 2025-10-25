@@ -3,32 +3,47 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "state";
 import PostWidget from "./PostWidget";
 import { host } from "hs";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 const PostsWidget = ({ userId, isProfile = false }) => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.posts);
   const token = useSelector((state) => state.token);
-// console.log("POSTS",posts);
+
   const getPosts = async () => {
-    const response = await fetch(`${host}posts`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+    try {
+      const response = await fetch(`${host}posts`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch posts");
+      }
+      
+      const data = await response.json();
+      dispatch(setPosts({ posts: data }));
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
   };
 
   const getUserPosts = async () => {
-    const response = await fetch(
-      `${host}posts/${userId}/posts`,
-      {
+    try {
+      const response = await fetch(`${host}posts/${userId}/posts`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch user posts");
       }
-    );
-    //console.log("This response",response);
-    const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+      
+      const data = await response.json();
+      dispatch(setPosts({ posts: data }));
+    } catch (error) {
+      console.error("Error fetching user posts:", error);
+    }
   };
 
   useEffect(() => {
@@ -37,11 +52,41 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isProfile, userId]); // Added dependencies
+
+  // Loading state
+  if (!posts) {
+    return (
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="200px"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Empty state
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return (
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="200px"
+      >
+        <Typography variant="h6" color="text.secondary">
+          {isProfile ? "No posts yet" : "No posts to display"}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <>
-      {Array.isArray(posts) ? (posts.map(
+      {posts.map(
         ({
           _id,
           userId,
@@ -67,7 +112,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             comments={comments}
           />
         )
-      )):<p>No posts</p>}
+      )}
     </>
   );
 };
