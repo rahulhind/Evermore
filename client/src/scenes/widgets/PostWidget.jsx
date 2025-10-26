@@ -95,75 +95,50 @@ const PostWidget = ({
   };
 
   // Add comment
-  const handleAddComment = async () => {
-    console.log("=".repeat(60));
-    console.log("💬 handleAddComment called");
-    console.log("Comment text:", commentText);
-    console.log("Trimmed:", commentText.trim());
+const handleAddComment = async () => {
+  if (!commentText.trim()) return;
 
-    if (!commentText.trim()) {
-      console.log("⚠️ Empty comment, returning");
-      return;
-    }
-
-    setIsSubmitting(true);
-
+  setIsSubmitting(true);
+  try {
     const url = `${host}posts/${postId}/comment`;
-    const requestBody = {
-      userId: loggedInUserId,
-      content: commentText.trim(),
-    };
+    console.log("💬 Adding comment...");
 
-    console.log("🔵 POST Request:");
-    console.log("  URL:", url);
-    console.log("  Body:", JSON.stringify(requestBody, null, 2));
-    console.log("  Token (first 20 chars):", token?.substring(0, 20) + "...");
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: loggedInUserId,
+        content: commentText.trim(),
+      }),
+    });
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+    console.log("📥 Response status:", response.status);
 
-      console.log("📥 Response received:");
-      console.log("  Status:", response.status);
-      console.log("  Status Text:", response.statusText);
-      console.log("  OK:", response.ok);
-
-      if (response.ok) {
-        const updatedPost = await response.json();
-        console.log("✅ Comment added successfully");
-        console.log("  New comments count:", updatedPost.comments?.length);
-        dispatch(setPost({ post: updatedPost }));
-        setCommentText("");
-      } else {
-        // Log error response
-        const errorText = await response.text();
-        console.error("❌ Server returned error:");
-        console.error("  Status:", response.status);
-        console.error("  Response:", errorText);
-        
-        try {
-          const errorJson = JSON.parse(errorText);
-          console.error("  Error JSON:", JSON.stringify(errorJson, null, 2));
-        } catch (e) {
-          console.error("  Raw response:", errorText);
-        }
-      }
-    } catch (error) {
-      console.error("❌ Error in handleAddComment:");
-      console.error("  Error type:", error.constructor.name);
-      console.error("  Error message:", error.message);
-      console.error("  Error stack:", error.stack);
-    } finally {
-      setIsSubmitting(false);
-      console.log("=".repeat(60));
+    if (response.ok) {
+      const updatedPost = await response.json();
+      console.log("✅ Comment added, new count:", updatedPost.comments?.length);
+      
+      // ✅ Update Redux store immediately
+      dispatch(setPost({ post: updatedPost }));
+      
+      setCommentText("");
+      
+      // ✅ Optional: Show success feedback
+      console.log("✅ Redux store updated");
+    } else {
+      const errorText = await response.text();
+      console.error("❌ Error:", errorText);
     }
-  };
+  } catch (error) {
+    console.error("❌ Error adding comment:", error);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   // Handle comment actions (edit, delete, like, reply)
   const handleCommentAction = async (action, commentId, data = {}) => {
