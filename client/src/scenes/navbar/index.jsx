@@ -23,13 +23,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
-import NotificationDropdown from "components/NotificationDropdown"; // ✅ ADD THIS IMPORT
-
+import NotificationDropdown from "components/NotificationDropdown"; 
+import ChatDropdown from "components/ChatDropdown"; // ✅ Add this import
+import { host } from "hs";
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user);
+  const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const theme = useTheme();
@@ -39,6 +41,32 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
 
   const fullName = `${user.firstName} ${user.lastName}`;
+
+  // ✅ LOGOUT HANDLER WITH ONLINE STATUS UPDATE
+  const handleLogout = async () => {
+    try {
+      console.log("👋 Logging out...");
+
+      // Update online status to offline
+      await fetch(`${host}users/${user._id}/online-status`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isOnline: false }),
+      });
+
+      console.log("✅ Online status set to offline");
+    } catch (error) {
+      console.error("❌ Error updating offline status:", error);
+    } finally {
+      // Always logout even if status update fails
+      dispatch(setLogout());
+      navigate("/");
+      console.log("✅ Logged out successfully");
+    }
+  };
 
   return (
     <FlexBetween padding="1rem 6%" backgroundColor={alt}>
@@ -82,12 +110,15 @@ const Navbar = () => {
               <LightMode sx={{ color: dark, fontSize: "25px" }} />
             )}
           </IconButton>
-          <Message sx={{ fontSize: "25px" }} />
-          
-          {/* ✅ REPLACED: <Notifications sx={{ fontSize: "25px" }} /> */}
+
+          {/* ✅ Chat Dropdown */}
+          <ChatDropdown />
+
+          {/* ✅ Notification Dropdown */}
           <NotificationDropdown />
-          
+
           <Help sx={{ fontSize: "25px" }} />
+
           <FormControl variant="standard" value={fullName}>
             <Select
               value={fullName}
@@ -109,7 +140,8 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              {/* ✅ UPDATED: Use handleLogout */}
+              <MenuItem onClick={handleLogout}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -160,12 +192,15 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-            <Message sx={{ fontSize: "25px" }} />
-            
-            {/* ✅ REPLACED: <Notifications sx={{ fontSize: "25px" }} /> */}
+
+            {/* ✅ Chat Dropdown */}
+            <ChatDropdown />
+
+            {/* ✅ Notification Dropdown */}
             <NotificationDropdown />
-            
+
             <Help sx={{ fontSize: "25px" }} />
+
             <FormControl variant="standard" value={fullName}>
               <Select
                 value={fullName}
@@ -187,9 +222,8 @@ const Navbar = () => {
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
-                  Log Out
-                </MenuItem>
+                {/* ✅ UPDATED: Use handleLogout */}
+                <MenuItem onClick={handleLogout}>Log Out</MenuItem>
               </Select>
             </FormControl>
           </FlexBetween>
