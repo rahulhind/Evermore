@@ -17,6 +17,7 @@ import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import { host } from "hs";
 import loadingGIF from "../../../src/loader.gif";
+
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
@@ -56,124 +57,138 @@ const Form = () => {
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
   const [loading, setLoading] = useState(false);
-  // const register = async (values, onSubmitProps) => {
-  //   // this allows us to send form info with image
-  //   //console.log("Coming");
-  //   const formData = new FormData();
-  //   for (let value in values) {
-  //     formData.append(value, values[value]);
-  //   }
-  //   formData.append("picturePath", values.picture.name);
 
-  //   const savedUserResponse = await fetch(`${host}auth/register`, {
-  //     method: "POST",
-  //     body: formData,
-  //   });
+  // ✅ FIXED: Added token parameter
+  const updateOnlineStatus = async (userId, token) => {
+    try {
+      console.log("📡 Updating online status for user:", userId);
+      
+      const response = await fetch(`${host}users/${userId}/online-status`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isOnline: true }),
+      });
 
-    
-  //   const savedUser = await savedUserResponse.json();
-  //   onSubmitProps.resetForm();
-
-  //   if (savedUser) {
-  //     setPageType("login");
-  //   }
-  // };
+      if (response.ok) {
+        console.log("✅ Online status updated");
+      } else {
+        console.error("❌ Failed to update online status:", response.status);
+      }
+    } catch (error) {
+      console.error("❌ Error updating online status:", error);
+    }
+  };
 
   const register = async (values, onSubmitProps) => {
-      try {
-        setLoading(true);
-
-        const formData = new FormData();
-        for (let value in values) {
-          formData.append(value, values[value]);
-        }
-        formData.append("picturePath", values.picture.name);
-
-        const savedUserResponse = await fetch(`${host}auth/register`, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!savedUserResponse.ok) {
-          console.error("Image upload failed:", savedUserResponse.status);
-          // Handle the error or notify the user
-        } else {
-          const savedUser = await savedUserResponse.json();
-          onSubmitProps.resetForm();
-
-          if (savedUser) {
-            setPageType("login");
-            console.log("Image uploaded successfully");
-          } else {
-            console.error("Error in registration:", savedUser);
-            // Handle the error or notify the user
-          }
-        }
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        // Handle the error or notify the user
-      } finally {
-        setLoading(false); // Move setLoading(false) to finally block
-      }
-    };
-  const login = async (values, onSubmitProps) => {
-    //  console.log("Coming login");
     try {
-      setLoading(true); // Set loading to true when starting the login process
+      setLoading(true);
+
+      const formData = new FormData();
+      for (let value in values) {
+        formData.append(value, values[value]);
+      }
+      formData.append("picturePath", values.picture.name);
+
+      const savedUserResponse = await fetch(`${host}auth/register`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!savedUserResponse.ok) {
+        console.error("Registration failed:", savedUserResponse.status);
+        alert("Registration failed. Please try again.");
+      } else {
+        const savedUser = await savedUserResponse.json();
+        onSubmitProps.resetForm();
+
+        if (savedUser) {
+          setPageType("login");
+          console.log("✅ Registration successful");
+          alert("Registration successful! Please login.");
+        } else {
+          console.error("Error in registration:", savedUser);
+        }
+      }
+    } catch (error) {
+      console.error("❌ Error in registration:", error);
+      alert("Registration error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const login = async (values, onSubmitProps) => {
+    try {
+      setLoading(true);
+      
+      console.log("🔐 Logging in...");
+      
       const loggedInResponse = await fetch(`${host}auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
 
+      if (!loggedInResponse.ok) {
+        console.error("❌ Login failed:", loggedInResponse.status);
+        alert("Login failed. Please check your credentials.");
+        return;
+      }
+
       const loggedIn = await loggedInResponse.json();
-      onSubmitProps.resetForm();
-      if (loggedIn) {
+      
+      if (loggedIn && loggedIn.user && loggedIn.token) {
+        console.log("✅ Login successful");
+        
+        // Update Redux state
         dispatch(
           setLogin({
             user: loggedIn.user,
             token: loggedIn.token,
           })
         );
+
+        // ✅ FIXED: Pass token to updateOnlineStatus
+        await updateOnlineStatus(loggedIn.user._id, loggedIn.token);
+
+        // Navigate to home
         navigate("/home");
+      } else {
+        console.error("❌ Invalid response from server");
+        alert("Login failed. Please try again.");
       }
-    } finally {
-      setLoading(false); // Set loading back to false when the login process is complete
+
       onSubmitProps.resetForm();
+    } catch (error) {
+      console.error("❌ Error in login:", error);
+      alert("Login error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
-  // const login = async (values, onSubmitProps) => {
-  // //  console.log("Coming login");
-  //   const loggedInResponse = await fetch(`${host}auth/login`, {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify(values),
-  //   });
-  //   const loggedIn = await loggedInResponse.json();
-  //   onSubmitProps.resetForm();
-  //   if (loggedIn) {
-  //     dispatch(
-  //       setLogin({
-  //         user: loggedIn.user,
-  //         token: loggedIn.token,
-  //       })
-  //     );
-  //     navigate("/home");
-  //   }
-  // };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);
     if (isRegister) await register(values, onSubmitProps);
   };
-  if (loading) return <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 'auto', // Set to 100% of the viewport height
-  }}>
-    <img src={loadingGIF} alt="Loading..." />
-  </div>
+
+  if (loading)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <img src={loadingGIF} alt="Loading..." />
+      </div>
+    );
+
   return (
     <Formik
       onSubmit={handleFormSubmit}
@@ -333,7 +348,7 @@ const Form = () => {
                 },
               }}
             >
-              {isLogin ? "Sign Up here." : "Login here."}
+              {isLogin ? "Don't have an account? Sign Up here." : "Already have an account? Login here."}
             </Typography>
           </Box>
         </form>
