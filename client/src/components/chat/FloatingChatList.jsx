@@ -72,6 +72,7 @@ const FloatingChatList = ({ onClose, onSelectFriend, onSelectGroup, onCreateGrou
       fetchGroups();
     }, 10000);
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filteredFriends = friends.filter((friend) =>

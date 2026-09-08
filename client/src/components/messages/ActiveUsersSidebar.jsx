@@ -40,6 +40,7 @@ const ActiveUsersSidebar = ({ onSelectUser }) => {
     fetchOnlineFriends();
     const interval = setInterval(fetchOnlineFriends, 10000);
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return (

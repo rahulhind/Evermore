@@ -20,10 +20,6 @@ import {
 import {
   Notifications,
   Close,
-  Security,
-  Campaign,
-  EmojiEvents,
-  Group,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -102,6 +98,7 @@ const NotificationDropdown = () => {
     fetchUnreadCount();
     intervalRef.current = setInterval(fetchUnreadCount, 30000);
     return () => clearInterval(intervalRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const handleClick = async (event) => {

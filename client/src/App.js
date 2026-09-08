@@ -35,12 +35,6 @@ const OnlineStatusHandler = () => {
       if (userId && token) {
         console.log("📡 Setting online status to false");
         
-        // Use sendBeacon for reliable async request on page unload
-        const blob = new Blob(
-          [JSON.stringify({ isOnline: false })],
-          { type: "application/json" }
-        );
-        
         // Fallback: try regular fetch with keepalive
         fetch(`${host}users/${userId}/online-status`, {
           method: "PATCH",

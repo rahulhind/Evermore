@@ -17,7 +17,6 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  AvatarGroup,
   Chip,
 } from "@mui/material";
 import {
@@ -30,12 +29,9 @@ import {
   ExitToApp,
   PersonAdd,
   Settings as SettingsIcon,
-  Done,
-  DoneAll,
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { host } from "hs";
-import { formatDistanceToNow } from "date-fns";
 import EmojiPicker from "emoji-picker-react";
 
 const GroupChatWindow = ({ groupId, onBack }) => {
@@ -49,10 +45,8 @@ const GroupChatWindow = ({ groupId, onBack }) => {
 
   const token = useSelector((state) => state.token);
   const userId = useSelector((state) => state.user._id);
-  const currentUser = useSelector((state) => state.user);
   const theme = useTheme();
   const messagesEndRef = useRef(null);
-  const fileInputRef = useRef(null);
   const pollingIntervalRef = useRef(null);
 
   // Fetch group details
@@ -154,6 +148,7 @@ const GroupChatWindow = ({ groupId, onBack }) => {
     return () => {
       clearInterval(pollingIntervalRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupId]);
 
   useEffect(() => {
@@ -253,7 +248,6 @@ const GroupChatWindow = ({ groupId, onBack }) => {
             );
           }
 
-          const hasRead = message.readBy.some((r) => r.user === userId);
           const readCount = message.readBy.length;
 
           return (

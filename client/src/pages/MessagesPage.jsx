@@ -7,7 +7,6 @@ import {
   Typography, // ✅ Add this
 } from "@mui/material";
 import { Message as MessageIcon } from "@mui/icons-material"; // ✅ Add this
-import { useSelector } from "react-redux";
 import MessagesSidebar from "components/messages/MessagesSidebar";
 import ChatWindow from "components/messages/ChatWindow"; // Make sure this file exists
 import GroupChatWindow from "components/messages/GroupChatWindow";
@@ -21,7 +20,6 @@ const MessagesPage = () => {
   
   const theme = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const userId = useSelector((state) => state.user._id);
 
   useEffect(() => {
     if (chatId) {

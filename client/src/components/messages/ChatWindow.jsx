@@ -14,7 +14,6 @@ import {
 } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { host } from "hs";
-import { formatDistanceToNow } from "date-fns";
 
 const ChatWindow = ({ otherUserId, onBack }) => {
   const [conversation, setConversation] = useState(null);
@@ -112,6 +111,7 @@ const ChatWindow = ({ otherUserId, onBack }) => {
     return () => {
       clearInterval(pollingIntervalRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [otherUserId]);
 
   useEffect(() => {

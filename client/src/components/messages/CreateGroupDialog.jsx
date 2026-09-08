@@ -58,6 +58,7 @@ const CreateGroupDialog = ({ open, onClose, onGroupCreated }) => {
     if (open) {
       fetchFriends();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const handleToggleMember = (friendId) => {

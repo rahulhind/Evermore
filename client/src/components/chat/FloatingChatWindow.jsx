@@ -203,6 +203,7 @@ const FloatingChatWindow = ({
     fetchConversation();
     pollingRef.current = setInterval(fetchConversation, 3000);
     return () => clearInterval(pollingRef.current);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [friend?._id, group?._id]);
 
   useEffect(() => {

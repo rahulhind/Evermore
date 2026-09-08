@@ -110,6 +110,7 @@ const MessagesSidebar = ({ onSelectChat, selectedChat }) => {
     }, 5000);
     
     return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, activeTab]);
 
   const filteredConversations = conversations.filter((conv) =>

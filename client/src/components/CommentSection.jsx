@@ -11,13 +11,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
   MoreVert,
   Edit,
   Delete,
 } from "@mui/icons-material";
-import FlexBetween from "./FlexBetween";
 
 const Comment = ({
   comment,
@@ -34,7 +31,6 @@ const Comment = ({
   const [anchorEl, setAnchorEl] = useState(null);
 
   const { palette } = useTheme();
-  const main = palette.neutral.main;
   const medium = palette.neutral.medium;
   const primary = palette.primary.main;
 

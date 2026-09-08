@@ -52,7 +52,8 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     } else {
       getPosts();
     }
-  }, [isProfile, userId]); // Added dependencies
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isProfile, userId]);
 
   // Loading state
   if (!posts) {
