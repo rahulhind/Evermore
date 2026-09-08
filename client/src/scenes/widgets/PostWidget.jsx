@@ -17,6 +17,7 @@ import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
 import CommentSection from "components/CommentSection";
+import { track } from "spectra";
 import { host } from "hs";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -62,6 +63,12 @@ const PostWidget = ({
   const { palette } = useTheme();
   const main = palette.neutral.main;
   const primary = palette.primary.main;
+
+  // The same button opens and closes the thread; only the opening is a signal.
+  const toggleComments = () => {
+    if (!isComments) track("CommentsOpened", { postId, commentCount: comments?.length || 0 });
+    setIsComments(!isComments);
+  };
 
   // Like post
   const patchLike = async () => {
@@ -303,7 +310,7 @@ const handleAddComment = async () => {
           </FlexBetween>
 
           <FlexBetween gap="0.3rem">
-            <IconButton onClick={() => setIsComments(!isComments)}>
+            <IconButton onClick={toggleComments}>
               <ChatBubbleOutlineOutlined />
             </IconButton>
             <Typography>{comments?.length || 0}</Typography>

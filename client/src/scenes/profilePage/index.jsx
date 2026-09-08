@@ -8,11 +8,13 @@ import FriendListWidget from "scenes/widgets/FriendListWidget";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import UserWidget from "scenes/widgets/UserWidget";
+import { track } from "spectra";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const { userId } = useParams();
   const token = useSelector((state) => state.token);
+  const loggedInUserId = useSelector((state) => state.user?._id);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
 
   const getUser = async () => {
@@ -27,6 +29,12 @@ const ProfilePage = () => {
   useEffect(() => {
     getUser();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keyed on the id in the URL rather than on mount, so opening one profile
+  // and then another from it counts as two.
+  useEffect(() => {
+    track("ProfileOpened", { profileId: userId, own: userId === loggedInUserId });
+  }, [userId, loggedInUserId]);
 
   if (!user) return null;
 
