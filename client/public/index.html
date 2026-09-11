@@ -25,12 +25,25 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Evermore</title>
+<!--Other way to configure Spectra-->
+<!--    Spectra.record({-->
+<!--    apiKey: '...',-->
+<!--    siteId: 'site_7915f7530ea2f74b',-->
+<!--    release: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) || 'dev',-->
+<!--    });-->
 
+<!--    Why you should not use HTML-->
+<!--    data-release="%REACT_APP_VERCEL_GIT_COMMIT_SHA%"-->
+
+<!--    Two consequences of doing it in HTML rather than JavaScript. You get the full 40-character commit hash, since there is no way to slice it there, which is fine because the limit is 64. And there is no || 'dev' fallback: if the variable is not defined at build time, Create React App leaves the literal %REACT_APP_VERCEL_GIT_COMMIT_SHA% in the page and that gets stored. So turn on "Automatically expose System Environment Variables" in the Vercel project, or define your own REACT_APP_RELEASE and use that instead.-->
+
+<!--    If you would rather keep the expression exactly as you wrote it, move the whole call into src/index.js as Spectra.record({ ..., release: ... }). JavaScript there does what you expect.  -->
     <!-- Spectra session replay (spectra-trace.com) -->
     <script src="https://api.spectra-trace.com/sdk/spectra.min.js"
             data-api-key="sp_live_d1fdae4e093f452c688102b0b0aa3f38"
             data-site-id="site_7915f7530ea2f74b"
             data-endpoint="https://api.spectra-trace.com/v1/ingest"
+            data-release="%REACT_APP_VERCEL_GIT_COMMIT_SHA%"
             async></script>
   </head>
   <body>
