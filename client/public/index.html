@@ -39,6 +39,10 @@
 
 <!--    If you would rather keep the expression exactly as you wrote it, move the whole call into src/index.js as Spectra.record({ ..., release: ... }). JavaScript there does what you expect.  -->
     <!-- Spectra session replay (spectra-trace.com) -->
+
+<!--    Must know>-->
+<!--    - Add REACT_APP_VERSION as an Environment Variable in the Vercel project with value 1.4.1, and bump it per release. Nothing else changes.-->
+<!--    - Or define it in the build script, "build": "REACT_APP_VERSION=$npm_package_version react-scripts build", and let package.json be the source of truth.-->
     <script src="https://api.spectra-trace.com/sdk/spectra.min.js"
             data-api-key="sp_live_d1fdae4e093f452c688102b0b0aa3f38"
             data-site-id="site_7915f7530ea2f74b"
