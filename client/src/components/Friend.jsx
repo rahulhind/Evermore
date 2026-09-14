@@ -43,8 +43,8 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         <UserImage image={userPicturePath} size="55px" />
         <Box
           onClick={() => {
-            // Degraded: clicking on profile does nothing, completely unresponsive
-            if (false) navigate(friendId);
+            navigate(`/profile/${friendId}`);
+            navigate(0);
           }}
         >
           <Typography
@@ -80,3 +80,4 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
 };
 
 export default Friend;
+

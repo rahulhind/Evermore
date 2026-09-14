@@ -317,9 +317,41 @@ const handleAddComment = async () => {
           </FlexBetween>
         </FlexBetween>
 
-        <IconButton>
-          <ShareOutlined />
-        </IconButton>
+        <FlexBetween gap="0.5rem">
+          {/* Layout that hides button on mobile screen (visible on md+, hidden on xs/sm) */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "inline-flex" },
+              alignItems: "center",
+            }}
+          >
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                track("HighTicketBoost", { postId, amount: 25, creatorId: postUserId });
+              }}
+              sx={{
+                borderRadius: "1.5rem",
+                textTransform: "none",
+                fontSize: "0.75rem",
+                fontWeight: "600",
+                borderColor: primary,
+                color: primary,
+                "&:hover": {
+                  backgroundColor: palette.primary.light,
+                  borderColor: primary,
+                },
+              }}
+            >
+              Boost ($25)
+            </Button>
+          </Box>
+
+          <IconButton>
+            <ShareOutlined />
+          </IconButton>
+        </FlexBetween>
       </FlexBetween>
       
       {isComments && (
