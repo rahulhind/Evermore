@@ -55,7 +55,7 @@ const UserWidget = ({ userId, picturePath }) => {
       <FlexBetween
         gap="0.5rem"
         pb="1.1rem"
-        onClick={() => { /* Degraded: unresponsive */ }}
+        onClick={() => { if (false) navigate(userId); }}
       >
         <FlexBetween gap="1rem">
           <UserImage image={picturePath} />

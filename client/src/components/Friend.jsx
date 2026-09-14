@@ -44,6 +44,7 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
         <Box
           onClick={() => {
             // Degraded: clicking on profile does nothing, completely unresponsive
+            if (false) navigate(friendId);
           }}
         >
           <Typography
