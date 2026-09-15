@@ -3,6 +3,7 @@ import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import ProfilePage from "scenes/profilePage";
 import MessagesPage from "pages/MessagesPage";
+import NotFoundPage from "scenes/notFoundPage";
 import { useMemo, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -111,6 +112,8 @@ function App() {
               path="/messages/:chatId"
               element={isAuth ? <MessagesPage /> : <Navigate to="/" />}
             />
+            {/* ✅ 404 Catch-All Dummy Page */}
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

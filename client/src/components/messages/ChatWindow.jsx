@@ -7,6 +7,7 @@ import {
   TextField,
   useTheme,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import {
   Send,
@@ -134,6 +135,35 @@ const ChatWindow = ({ otherUserId, onBack }) => {
   }
 
   const otherUser = getOtherUser();
+
+  if (!conversation) {
+    return (
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          p: 3,
+          textAlign: "center",
+          bgcolor: theme.palette.background.default,
+        }}
+      >
+        <Typography variant="h6" color="text.secondary" mb={1}>
+          Conversation Unavailable
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          Could not load the conversation with this user.
+        </Typography>
+        {onBack && (
+          <Button variant="outlined" onClick={onBack}>
+            Back to Messages
+          </Button>
+        )}
+      </Box>
+    );
+  }
 
   return (
     <Box

@@ -4,7 +4,7 @@ import {
   LocationOnOutlined,
   WorkOutlineOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+import { Box, Typography, Divider, useTheme, Skeleton } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -36,7 +36,22 @@ const UserWidget = ({ userId, picturePath }) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!user) {
-    return null;
+    return (
+      <WidgetWrapper>
+        <Box display="flex" alignItems="center" gap="1rem" pb="1.1rem">
+          <Skeleton variant="circular" width={60} height={60} />
+          <Box flex={1}>
+            <Skeleton variant="text" width="70%" height={24} />
+            <Skeleton variant="text" width="40%" height={18} />
+          </Box>
+        </Box>
+        <Divider />
+        <Box p="1rem 0">
+          <Skeleton variant="text" width="80%" height="20px" />
+          <Skeleton variant="text" width="60%" height="20px" />
+        </Box>
+      </WidgetWrapper>
+    );
   }
 
   const {
